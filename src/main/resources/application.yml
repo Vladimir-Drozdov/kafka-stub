@@ -1,5 +1,12 @@
 server:
   port: 8080
+  tomcat:
+    threads:
+      max: 200
+      min-spare: 20
+  servlet:
+    async:
+      request-timeout: 60000
 
 spring:
   application:
@@ -43,10 +50,19 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics
+        # prometheus - отдельный endpoint /actuator/prometheus, который Prometheus-сервер периодически опрашивает (scrape) для сбора метрик.
+        include: health,info,metrics,prometheus
   endpoint:
     health:
       show-details: always
+  metrics:
+    tags:
+      # Тег application добавляется к каждой метрике - это удобно, если в одном Prometheus собираются метрики нескольких сервисов, чтобы отличать их друг от друга в Grafana.
+      application: ${spring.application.name}
+  prometheus:
+    metrics:
+      export:
+        enabled: true
 
 app:
   kafka:
