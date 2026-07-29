@@ -29,10 +29,8 @@ public class DelayService {
     }
     @PostConstruct
     public void init() {
-        Gauge.builder("kafkastub_response_delay_ms", delayMillis, AtomicLong::get)
-                .register(meterRegistry);
+        Gauge.builder("kafkastub_response_delay_ms", delayMillis, AtomicLong::get).register(meterRegistry);
     }
-
 
     public void setDelayMillis(long millis) {
         if (millis < 0) {

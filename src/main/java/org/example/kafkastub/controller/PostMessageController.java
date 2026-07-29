@@ -31,14 +31,12 @@ public class PostMessageController {
     }
 
     @PostMapping("/post-message")
-    public DeferredResult<ResponseEntity<String>> postMessage(@Valid @RequestBody PostMessageRequest request,
-                                                                HttpServletRequest httpRequest) {
+    public DeferredResult<ResponseEntity<String>> postMessage(@Valid @RequestBody PostMessageRequest request, HttpServletRequest httpRequest) {
         long timeoutMs = delayService.getDelayMillis() + TIMEOUT_SAFETY_MARGIN_MS;
         DeferredResult<ResponseEntity<String>> deferredResult = new DeferredResult<>(timeoutMs);
 
         deferredResult.onTimeout(() -> deferredResult.setErrorResult(
-                ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
-                        .body("Превышено время ожидания ответа")));
+                ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("Превышено время ожидания ответа")));
 
         String method = httpRequest.getMethod();
         String uri = httpRequest.getRequestURI();
@@ -49,12 +47,10 @@ public class PostMessageController {
                 deferredResult.setResult(ResponseEntity.status(HttpStatus.OK).body("OK"));
             } catch (KafkaPublishException e) {
                 log.error("Ошибка при записи сообщения в Kafka", e);
-                deferredResult.setResult(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body("Не удалось записать сообщение в Kafka"));
+                deferredResult.setResult(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Не удалось записать сообщение в Kafka"));
             } catch (Exception e) {
                 log.error("Непредвиденная ошибка при обработке сообщения", e);
-                deferredResult.setErrorResult(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body("Внутренняя ошибка сервера"));
+                deferredResult.setErrorResult(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Внутренняя ошибка сервера"));
             }
         });
 

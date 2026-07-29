@@ -23,14 +23,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<String> handleNotReadable(HttpMessageNotReadableException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body("Некорректный JSON в теле запроса");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Некорректный JSON в теле запроса");
     }
 
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     public ResponseEntity<String> handleUnsupportedMediaType(HttpMediaTypeNotSupportedException e) {
-        return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
-                .body("Content-Type должен быть application/json");
+        return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body("Content-Type должен быть application/json");
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

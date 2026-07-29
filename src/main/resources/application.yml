@@ -50,14 +50,13 @@ management:
   endpoints:
     web:
       exposure:
-        # prometheus - отдельный endpoint /actuator/prometheus, который Prometheus-сервер периодически опрашивает (scrape) для сбора метрик.
         include: health,info,metrics,prometheus
   endpoint:
     health:
       show-details: always
   metrics:
     tags:
-      # Тег application добавляется к каждой метрике - это удобно, если в одном Prometheus собираются метрики нескольких сервисов, чтобы отличать их друг от друга в Grafana.
+      # Тег application добавляется к каждой метрике - это удобно, если в одном Prometheus собираются метрики нескольких приложений, чтобы отличать их друг от друга в Grafana.
       application: ${spring.application.name}
   prometheus:
     metrics:

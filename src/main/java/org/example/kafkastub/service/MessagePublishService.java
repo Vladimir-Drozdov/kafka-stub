@@ -23,9 +23,7 @@ public class MessagePublishService {
     private final ObjectMapper objectMapper;
     private final String topic;
 
-    public MessagePublishService(KafkaTemplate<String, String> kafkaTemplate,
-                                 ObjectMapper objectMapper,
-                                 @Value("${app.kafka.topic}") String topic) {
+    public MessagePublishService(KafkaTemplate<String, String> kafkaTemplate, ObjectMapper objectMapper, @Value("${app.kafka.topic}") String topic) {
         this.kafkaTemplate = kafkaTemplate;
         this.objectMapper = objectMapper;
         this.topic = topic;
@@ -34,12 +32,7 @@ public class MessagePublishService {
     public void publish(String msgId, String method, String uri) {
         long timestampMillis = System.currentTimeMillis();
 
-        KafkaMessage message = new KafkaMessage(
-                msgId,
-                String.valueOf(timestampMillis),
-                method,
-                uri
-        );
+        KafkaMessage message = new KafkaMessage(msgId, String.valueOf(timestampMillis), method, uri);
 
         String payload;
         try {
