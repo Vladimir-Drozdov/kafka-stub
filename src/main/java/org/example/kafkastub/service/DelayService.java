@@ -27,6 +27,7 @@ public class DelayService {
     public DelayService(MeterRegistry meterRegistry) {
         this.meterRegistry = meterRegistry;
     }
+
     @PostConstruct
     public void init() {
         Gauge.builder("kafkastub_response_delay_ms", delayMillis, AtomicLong::get).register(meterRegistry);

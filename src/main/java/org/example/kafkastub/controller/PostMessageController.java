@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.DeferredResult;
 
+import java.util.concurrent.ScheduledFuture;
+
 @RestController
 public class PostMessageController {
 
@@ -29,19 +31,16 @@ public class PostMessageController {
         this.messagePublishService = messagePublishService;
         this.delayService = delayService;
     }
-
+    
     @PostMapping("/post-message")
     public DeferredResult<ResponseEntity<String>> postMessage(@Valid @RequestBody PostMessageRequest request, HttpServletRequest httpRequest) {
         long timeoutMs = delayService.getDelayMillis() + TIMEOUT_SAFETY_MARGIN_MS;
         DeferredResult<ResponseEntity<String>> deferredResult = new DeferredResult<>(timeoutMs);
 
-        deferredResult.onTimeout(() -> deferredResult.setErrorResult(
-                ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("Превышено время ожидания ответа")));
-
         String method = httpRequest.getMethod();
         String uri = httpRequest.getRequestURI();
 
-        delayService.scheduleAfterDelay(() -> {
+        ScheduledFuture<?> scheduledPublish = delayService.scheduleAfterDelay(() -> {
             try {
                 messagePublishService.publish(request.getMsgId(), method, uri);
                 deferredResult.setResult(ResponseEntity.status(HttpStatus.OK).body("OK"));
@@ -52,6 +51,11 @@ public class PostMessageController {
                 log.error("Непредвиденная ошибка при обработке сообщения", e);
                 deferredResult.setErrorResult(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Внутренняя ошибка сервера"));
             }
+        });
+
+        deferredResult.onTimeout(() -> {
+            scheduledPublish.cancel(false);
+            deferredResult.setErrorResult(ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("Превышено время ожидания ответа"));
         });
 
         return deferredResult;
