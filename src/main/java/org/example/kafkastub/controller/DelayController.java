@@ -3,16 +3,17 @@ package org.example.kafkastub.controller;
 import org.example.kafkastub.service.DelayService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /*
- * Управление искусственной задержкой ответа /post-message в рантайме, без перезапуска приложения.
- *   PUT  /delay?millis=10000   - выставить задержку 10 секунд
- *   PUT  /delay?millis=0       - отключить задержку
- *   GET  /delay                - узнать текущее значение
- */
+    Управление искусственной задержкой ответа /post-message в рантайме, без перезапуска приложения.
+    POST  /delay?millis=10000   - выставить задержку 10 секунд
+    POST  /delay?millis=0       - отключить задержку
+    GET  /delay                - узнать текущее значение
+*/
+
 @RestController
 public class DelayController {
 
@@ -22,7 +23,7 @@ public class DelayController {
         this.delayService = delayService;
     }
 
-    @PutMapping("/delay")
+    @PostMapping("/delay")
     public ResponseEntity<String> setDelay(@RequestParam long millis) {
         delayService.setDelayMillis(millis);
         return ResponseEntity.ok("Задержка установлена: " + millis + " мс");
