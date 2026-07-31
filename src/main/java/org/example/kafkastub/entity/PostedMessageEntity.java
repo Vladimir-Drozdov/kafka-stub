@@ -36,8 +36,7 @@ public class PostedMessageEntity {
     public PostedMessageEntity() {
     }
 
-    public PostedMessageEntity(String msgId, String timestamp, String method, String uri,
-                                Integer kafkaPartition, Long kafkaOffset) {
+    public PostedMessageEntity(String msgId, String timestamp, String method, String uri, Integer kafkaPartition, Long kafkaOffset) {
         this.msgId = msgId;
         this.timestamp = timestamp;
         this.method = method;

@@ -26,8 +26,7 @@ public class PostedMessageKafkaListener {
     @KafkaListener(topics = "${app.kafka.topic}", groupId = "${spring.kafka.consumer.group-id}")
     public void onMessage(ConsumerRecord<String, String> record) {
         String payload = record.value();
-        log.info("Получено сообщение из топика '{}', partition={}, offset={}: {}",
-                record.topic(), record.partition(), record.offset(), payload);
+        log.info("Получено сообщение из топика '{}', partition={}, offset={}: {}", record.topic(), record.partition(), record.offset(), payload);
 
         KafkaMessage kafkaMessage;
         try {
