@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 /*
     Управление искусственной задержкой ответа /post-message в рантайме, без перезапуска приложения.
     POST  /delay?millis=10000   - выставить задержку 10 секунд
-    POST  /delay?millis=0       - отключить задержку
-    GET  /delay                - узнать текущее значение
+    POST  /delay?millis=0     - отключить задержку
+    GET  /delay           - узнать текущее значение
 */
 
 @RestController

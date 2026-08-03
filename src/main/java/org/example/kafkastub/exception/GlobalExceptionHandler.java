@@ -15,9 +15,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<String> handleValidationError(MethodArgumentNotValidException e) {
         String message = e.getBindingResult().getFieldErrors().stream()
-                .findFirst()
-                .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
-                .orElse("Некорректное тело запроса");
+                .findFirst().map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage()).orElse("Некорректное тело запроса");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
     }
 
