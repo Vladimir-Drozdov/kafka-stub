@@ -19,7 +19,6 @@ public class DelayService {
 
     private static final Logger log = LoggerFactory.getLogger(DelayService.class);
     private static final int SCHEDULER_POOL_SIZE = 8;
-
     private final AtomicLong delayMillis = new AtomicLong(0);
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(SCHEDULER_POOL_SIZE);
     private final MeterRegistry meterRegistry;
